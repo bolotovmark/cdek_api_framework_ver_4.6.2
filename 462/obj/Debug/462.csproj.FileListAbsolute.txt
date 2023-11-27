@@ -1,0 +1,6 @@
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/bin/Debug/_462.exe
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/bin/Debug/_462.pdb
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/obj/Debug/462.csproj.AssemblyReference.cache
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/obj/Debug/462.csproj.CoreCompileInputs.cache
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/obj/Debug/_462.exe
+/Users/markbolotov/Library/CloudStorage/OneDrive-Личная/Работа/ЭРИС/API Транспортная компания/462/462/462/obj/Debug/_462.pdb
