@@ -30,7 +30,8 @@ namespace _462
             webRequest.ContentType = "application/x-www-form-urlencoded";
             
             Stream reqStream = webRequest.GetRequestStream();
-            string postData = $"grant_type=client_credentials&client_id={_account}&client_secret={_securePassword}";
+            //string postData = $"grant_type=client_credentials&client_id={_account}&client_secret={_securePassword}";
+            string postData ="grant_type=client_credentials&client_id=" + _account + "&client_secret=" + _securePassword;
             byte[] postArray = Encoding.ASCII.GetBytes(postData);
             reqStream.Write(postArray, 0, postArray.Length);
             reqStream.Close();
@@ -45,7 +46,7 @@ namespace _462
 
         public string GetCodeCity(string fullNameCity)
         {
-            string URL = $"https://api.cdek.ru/v2/location/cities?city={fullNameCity}";
+            string URL = "https://api.cdek.ru/v2/location/cities?city=" + fullNameCity;
             
             WebRequest webRequest = WebRequest.Create(URL);
             
@@ -76,10 +77,26 @@ namespace _462
             string massStr = (mass * 1000).ToString(CultureInfo.InvariantCulture);
             string volumeStr = volume.ToString(CultureInfo.InvariantCulture);
             
-            string jsonRequestData = $"{{\n    \"tariff_code\": \"{tarifCode}\",\n    " +
-                                     $"\"from_location\": {{\n        \"code\": {fromCodeCity}\n    }},\n    \"to_location\": {{\n        " +
-                                     $"\"code\": {toCodeCity}\n    }},\n    \"packages\": [\n        {{\n            \"height\": 0,\n           " +
-                                     $" \"length\": 0,\n            \"weight\": {massStr},\n            \"width\": 0\n        }}\n    ]\n}}";
+            string jsonRequestData = "{" +
+                                     "\"tariff_code\":" + "\"" + tarifCode + "\"," +
+                                     "\"from_location\":" + "{" +
+                                     "\"code\":" + fromCodeCity +
+                                     "}," +
+                                     "\"to_location\":" + "{" +
+                                     "\"code\":" + toCodeCity +
+                                     "}," +
+                                     "\"packages\":[" + "{" +
+                                     "\"height\":0," +
+                                     "\"length\":0," +
+                                     "\"weight\":" + massStr + "," +
+                                     "\"width\":0" +
+                                     "}" +
+                                     "]" +
+                                     "}";
+            // string jsonRequestData = $"{{\n    \"tariff_code\": \"{tarifCode}\",\n    " +
+            //                          $"\"from_location\": {{\n        \"code\": {fromCodeCity}\n    }},\n    \"to_location\": {{\n        " +
+            //                          $"\"code\": {toCodeCity}\n    }},\n    \"packages\": [\n        {{\n            \"height\": 0,\n           " +
+            //                          $" \"length\": 0,\n            \"weight\": {massStr},\n            \"width\": 0\n        }}\n    ]\n}}";
             var sentData = Encoding.UTF8.GetBytes(jsonRequestData);
             
             HttpWebRequest req = WebRequest.Create(urlRequest) as HttpWebRequest;
