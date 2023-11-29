@@ -41,6 +41,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ClientCDEK.cs" />
+        <Compile Include="ClientDelovyiLinii.cs" />
+        <Compile Include="ClientKIT.cs" />
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
