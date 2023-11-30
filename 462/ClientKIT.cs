@@ -61,9 +61,10 @@ namespace _462
                 Console.WriteLine(cityArrival);
             }
             string cityArrivalCode = GetCodeCity(cityArrival);
-            string massStr = mass.ToString(CultureInfo.InvariantCulture);
-            string volumeStr = volume.ToString(CultureInfo.InvariantCulture);
             
+            string massStr = Convert.ToInt32(mass).ToString();
+            string volumeStr = volume.ToString(CultureInfo.InvariantCulture);
+   
             string jsonData = "{" +
                               "\"city_pickup_code\": \"" + cityDerivalCode + "\"," +
                               "\"city_delivery_code\": \"" + cityArrivalCode + "\"," +
