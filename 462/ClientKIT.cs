@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -51,7 +52,7 @@ namespace _462
             return match.Groups[1].Value;
         }
 
-        public string CalculatePrice(string cityArrival, double mass, double volume)
+        public Dictionary<string, string> CalculatePrice(string cityArrival, double mass, double volume)
         {
             string urlRequest = "https://capi.tk-kit.com/1.1/order/calculate";
             string cityDerivalCode = "590001200000"; //code Чайковский
@@ -66,23 +67,35 @@ namespace _462
             string volumeStr = volume.ToString(CultureInfo.InvariantCulture);
    
             string jsonData = "{" +
-                              "\"city_pickup_code\": \"" + cityDerivalCode + "\"," +
-                              "\"city_delivery_code\": \"" + cityArrivalCode + "\"," +
-                              "\"declared_price\": \"1000\"," +
+                              "\"city_pickup_code\": \"" + cityDerivalCode + "\", " +
+                              "\"city_delivery_code\": \"" + cityArrivalCode + "\", " +
+                              "\"declared_price\": \"1000\", " +
                               "\"places\": [" +
                               "{" +
-                              "\"count_place\": \"1\"," +
-                              "\"volume\": \"" + volumeStr + "\"," +
+                              "\"count_place\": \"1\", " +
+                              "\"volume\": \"" + volumeStr + "\", " +
                               "\"weight\": \"" + massStr + "\"" +
                               "}" +
                               "]" +
                               "}";
 
             string responce = PostRequest(urlRequest, jsonData);
+
             string pattern = @"""standart""\s*:\s*\{[^}]*""cost""\s*:\s*(\d+)";
-            Match match = Regex.Match(responce, pattern);
+            Match matchPrice = Regex.Match(responce, pattern);
+            var price = matchPrice.Groups[1].Value;
             
-            return match.Groups[1].Value;
+            pattern = "\"time\"\\s*:\\s*(\\d+)";
+            Match matchPeriod = Regex.Match(responce, pattern);
+            var period = matchPeriod.Groups[1].Value;
+            
+            var output = new Dictionary<string, string>()
+            {
+                { "price", price},
+                { "period", period},
+            };
+            return output;
         }
+        
     }
 }

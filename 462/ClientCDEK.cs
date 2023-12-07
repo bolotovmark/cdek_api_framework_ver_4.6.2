@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -62,7 +63,7 @@ namespace _462
             return match.Groups[1].Value;
         }
 
-        public string CalculatePrice(string cityArrival, double mass, double volume)
+        public Dictionary<string, string> CalculatePriceCityToCity(string cityArrival, double mass, double volume)
         {
             string urlRequest = "https://api.cdek.ru/v2/calculator/tariff";
             string tarifCode = "136";   // код тарифа
@@ -114,10 +115,86 @@ namespace _462
             var resStream = res.GetResponseStream();
             var sr = new StreamReader(resStream, Encoding.UTF8);
 
+            var json = sr.ReadToEnd();
+            
             string pattern =  "\"delivery_sum\":(\\d+(\\.\\d+)?)";
-            var match = Regex.Match(sr.ReadToEnd(), pattern);
-                    
-            return match.Groups[1].Value;
+            var matchPrice = Regex.Match(json, pattern);
+            var price = matchPrice.Groups[1].Value;
+                
+            pattern = "\"period_min\"\\s*:\\s*(\\d+)";
+            var matchPeriod = Regex.Match(json, pattern);
+            var period = matchPeriod.Groups[1].Value;
+
+            var output = new Dictionary<string, string>()
+            {
+                { "price", price},
+                { "period", period},
+            };
+            return output;
+        }
+        
+        public Dictionary<string, string> CalculatePriceAddressToAddress(string cityArrival, double mass, double volume)
+        {
+            string urlRequest = "https://api.cdek.ru/v2/calculator/tariff";
+            string tarifCode = "136";   // код тарифа
+            string fromCityAddress = "г. Чайковский, ул. Промышленная, 8/25";
+            string massStr = (mass * 1000).ToString(CultureInfo.InvariantCulture);
+            string volumeStr = volume.ToString(CultureInfo.InvariantCulture);
+            
+            string jsonRequestData = "{" +
+                                     "\"tariff_code\":" + "\"" + tarifCode + "\"," +
+                                     "\"from_location\":" + "{" +
+                                     "\"address\": \"" + fromCityAddress +
+                                     "\"}," +
+                                     "\"to_location\":" + "{" +
+                                     "\"address\": \"" + cityArrival +
+                                     "\"}," +
+                                     "\"packages\":[" + "{" +
+                                     "\"height\":0," +
+                                     "\"length\":0," +
+                                     "\"weight\":" + massStr + "," +
+                                     "\"width\":0" +
+                                     "}" +
+                                     "]" +
+                                     "}";
+
+            // string jsonRequestData = $"{{\n    \"tariff_code\": \"{tarifCode}\",\n    " +
+            //                          $"\"from_location\": {{\n        \"code\": {fromCodeCity}\n    }},\n    \"to_location\": {{\n        " +
+            //                          $"\"code\": {toCodeCity}\n    }},\n    \"packages\": [\n        {{\n            \"height\": 0,\n           " +
+            //                          $" \"length\": 0,\n            \"weight\": {massStr},\n            \"width\": 0\n        }}\n    ]\n}}";
+            var sentData = Encoding.UTF8.GetBytes(jsonRequestData);
+            
+            HttpWebRequest req = WebRequest.Create(urlRequest) as HttpWebRequest;
+            req.Method = "POST";
+            req.Headers.Add("Authorization", "Bearer " + _accessToken);
+            req.ContentType = "application/json";
+            req.Accept = "application/json";
+            
+            req.ContentLength = sentData.Length;
+            Stream sendStream = req.GetRequestStream();
+            sendStream.Write(sentData, 0, sentData.Length);
+ 
+
+            var res = req.GetResponse() as HttpWebResponse;
+            var resStream = res.GetResponseStream();
+            var sr = new StreamReader(resStream, Encoding.UTF8);
+
+            var json = sr.ReadToEnd();
+            
+            string pattern =  "\"delivery_sum\":(\\d+(\\.\\d+)?)";
+            var matchPrice = Regex.Match(json, pattern);
+            var price = matchPrice.Groups[1].Value;
+                
+            pattern = "\"period_min\"\\s*:\\s*(\\d+)";
+            var matchPeriod = Regex.Match(json, pattern);
+            var period = matchPeriod.Groups[1].Value;
+            
+            var output = new Dictionary<string, string>()
+            {
+                { "price", price},
+                { "period", period},
+            };
+            return output;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace _462
             req.Method = "POST";
             req.ContentType = "application/json";
             req.Accept = "application/json";
+            req.Timeout = 10000;
             
             req.ContentLength = sentData.Length;
             Stream sendStream = req.GetRequestStream();
