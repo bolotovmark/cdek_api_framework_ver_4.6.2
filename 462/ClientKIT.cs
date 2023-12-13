@@ -35,8 +35,12 @@ namespace _462
             var res = req.GetResponse() as HttpWebResponse;
             var resStream = res.GetResponseStream();
             var sr = new StreamReader(resStream, Encoding.UTF8);
-
-            return sr.ReadToEnd();
+            
+            var response = sr.ReadToEnd();
+            res.Dispose();
+            sr.Dispose();
+            sendStream.Dispose();
+            return response;
         }
 
         public string GetCodeCity(string cityDerival)

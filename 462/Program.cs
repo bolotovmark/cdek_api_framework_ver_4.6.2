@@ -22,11 +22,12 @@ namespace _462
             Console.WriteLine("KIT(city2city): price: " + output["price"] + " // period: " + output["period"]);
             
             //Delovyi Linii
-            var clientDelovyiLinii = new ClientDelovyiLinii("0F74D344-4281-4A25-A545-8A5A48566D44");
-            // Console.WriteLine(clientDelovyiLinii.CalculatePrice("Екатеринбург", 12.3, 0.07));
-            // Console.WriteLine(clientDelovyiLinii.CalculatePrice("Екатеринбург, площадь Бахчиванджи, 1", 12.3, 0.07));
-            //
-            
+            var clientDelovyiLinii = new ClientDelovyiLinii("5994B3CF-AA7A-4D2E-9057-51DB55802FA0");
+            output = clientDelovyiLinii.CalculatePriceCityToCity("Пермь", 12.3, 0.07);
+            Console.WriteLine("DL(city2city): price: " + output["price"] + " // period: " + output["period"]);
+
+            output = clientDelovyiLinii.CalculatePriceAddressToAddress("Пермь, Профессора Дедюкина 18", 12.3, 0.07);
+            Console.WriteLine("DL(address2address): price: " + output["price"] + " // period: " + output["period"]);
         }
     }
     
